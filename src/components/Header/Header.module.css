@@ -3,10 +3,12 @@
 .header {
     background-color: blue;
     padding-top: 50px;
+    position: absolute;
 }
 
 .btn {
     position: absolute;
+    z-index: 1000;
 }
 
 
