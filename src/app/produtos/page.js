@@ -1,9 +1,13 @@
 'use client';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import styles from './page.module.css';
+import CardProd from "@/components/CardProd";
 
 export default function Produtos() {
 
     const [prods, setProds] = useState(null);
+    const [cats, setCats] = useState(null);
+    const [prodSelected, setProdselected] = useState(null);
 
     useEffect(() => {
         const fetchProds = async () => {
@@ -22,6 +26,24 @@ export default function Produtos() {
         fetchProds();
     }, []);
 
+    useEffect(() => {
+        const fetchCats = async () => {
+            const response = await fetch('https://stock.dev.vilhena.ifro.edu.br/api/categorias');
+            if (!response.ok) {
+                throw new Error(`Erro ao buscar Categorias ${response.statusText}`);
+            }
+            const data = await response.json();
+            console.log(data);
+
+
+        }
+        fetchCats();
+    }, []);
+
+    const getNomeCategoria = (id_categoria) => {
+        const categoria = cats?.find(cat => cat.id === id_categoria);
+        return categoria ? categoria.nome : 'Categoria Indefinida';
+    }
     
 
     return (
@@ -43,11 +65,11 @@ export default function Produtos() {
                         </thead>
                         <tbody>
                             {prods.map((prod) => (
-                                <tr key={prod.id}>
+                                <tr key={prod.id} onClick={() => setProdSelected(prod)}>
                                     <td>{prod.id}</td>
                                     <td>{prod.nome}</td>
                                     <td>{prod.descricao}</td>
-                                    <td>{prod.categoria_id}</td>
+                                    <td>{getNomeCategoria(prod.categoria_id)}</td>
                                     <td>{prod.quantidade_estoque}</td>
                                     <td>{prod.preco}</td>
                                </tr>
@@ -57,6 +79,8 @@ export default function Produtos() {
                 </div>
             }
 
-        </div>
+            {/*{como criar uma renderização condicional com base no estado prod?}*/}
+            {prodSelected && <CardProd/>}
+            </div>
     )
 }

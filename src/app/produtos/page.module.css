@@ -9,3 +9,7 @@
 .tbl th {
     background-color: #bbb;
 }
+
+.tbl tr {
+    cursor: pointer;
+}
