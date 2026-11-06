@@ -8,6 +8,7 @@ export default function Produtos() {
     const [prods, setProds] = useState(null);
     const [cats, setCats] = useState(null);
     const [prodSelected, setProdselected] = useState(null);
+    const [busca, setBusca] = useEffect('');
 
     useEffect(() => {
         const fetchProds = async () => {
@@ -44,11 +45,20 @@ export default function Produtos() {
         const categoria = cats?.find(cat => cat.id === id_categoria);
         return categoria ? categoria.nome : 'Categoria Indefinida';
     }
-    
+
+    const filtro = prods?.filter( p => p.nome.toLowerCase().includes(busca.toLowerCase()));
+
 
     return (
         <div>
             <h1>Produtos</h1>
+            {filtro && 
+                filtro.map((f) =>(
+                    <p>{f.nome}</p>
+                ))
+            }
+            { /*sempre que o usuário alterar o conteúdo do input, atualize o estado busca */}
+            <input type="text" placeholder="Busque um produto" onChange={(e) => setBusca(e.target.value) } value={busca}/>
             {prods === null ?
                 <p>Carregando lista de produtos...</p> :
                 <div>
@@ -80,7 +90,8 @@ export default function Produtos() {
             }
 
             {/*{como criar uma renderização condicional com base no estado prod?}*/}
-            {prodSelected && <CardProd/>}
+            {prodSelected && <CardProd produto=
+            {prodSelected}/>}
             </div>
     )
 }
